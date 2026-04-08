@@ -1,11 +1,18 @@
 import { useState, useEffect, useRef } from "react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function App() {
 
 // 🔐 Auth
-const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [name, setName] = useState("");
 const [email, setEmail] = useState("");
+const [address, setAddress] = useState("");
+const [phone, setPhone] = useState("");
 const [password, setPassword] = useState("");
+const [confirmPassword, setConfirmPassword] = useState("");
+const [authMessage, setAuthMessage] = useState("");
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 // 🧭 Navigation
 const [currentPage, setCurrentPage] = useState("dashboard");
@@ -19,7 +26,29 @@ const [imagePreview, setImagePreview] = useState(null);
 const [result, setResult] = useState(null);
 const [loading, setLoading] = useState(false);
 
+
+// History
+const [scanHistory, setScanHistory] = useState([]);
+
 const resultRef = useRef(null);
+
+useEffect(() => {
+const saved = localStorage.getItem("phishguard_history");
+if (saved) setScanHistory(JSON.parse(saved));
+}, []);
+
+const saveToHistory = (input, result) => {
+const newScan = {
+id: Date.now(),
+date: new Date().toLocaleString(),
+input,
+verdict: result.verdict,
+riskScore: result.riskScore,
+};
+const updated = [newScan, ...scanHistory];
+setScanHistory(updated);
+localStorage.setItem("phishguard_history", JSON.stringify(updated));
+};
 
 // 🔥 ANALYZE (Unified)
 const analyze = async () => {
