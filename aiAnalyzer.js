@@ -5,15 +5,15 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY;
 async function analyzeWithAI(text, source, organisation) {
   try {
     const prompt = `
-You are an advanced cybersecurity analyst AI.
+Analyze the message carefully. Even if text is partially corrupted, detect phishing intent.
 
-Analyze the message and classify it as Safe, Suspicious, or High Risk.
+Look for:
+- urgency ("urgent", "blocked", "verify now")
+- banking/financial context
+- requests for action
+- suspicious tone
 
-Think deeply:
-- Does this scenario make sense?
-- Is there urgency, pressure, or manipulation?
-- Is sensitive info requested?
-- Is the communication realistic?
+If message resembles a phishing attempt, classify as High Risk.
 
 Message:
 "${text}"
@@ -28,21 +28,21 @@ Return ONLY JSON:
 }
 `;
 
-    const response = await axios.post(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-       model: "llama-3.3-70b-versatile",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.2
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${GROQ_API_KEY}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
-
+  const response = await axios.post(
+  "https://api.groq.com/openai/v1/chat/completions",
+  {
+    model: "llama-3.3-70b-versatile",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.2
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${GROQ_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    timeout: 60000 // 🔥 IMPORTANT (inside config)
+  }
+);
     let output = response.data.choices[0].message.content;
 
 // 🔥 CLEAN RESPONSE
