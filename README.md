@@ -13,6 +13,10 @@ Risk scoring and threat assessment
 Detailed explanations for detected threats
 Google Safe Browsing API integration
 User-friendly interface for security awareness
+
+
+
+
 **Tech Stack**
 Frontend-React.js,
 Backend-Node.js
@@ -22,6 +26,8 @@ MongoDB
 APIs & Libraries
 Google Safe Browsing API
 OCR.js (Optical Character Recognition)
+
+
 **How It Works**
 User submits a suspicious URL, message, or image.
 Images are processed using OCR to extract text.
@@ -29,6 +35,9 @@ URLs are analyzed using threat intelligence and reputation checks.
 The system evaluates potential phishing indicators.
 A risk score and explanation are generated.
 The user receives a clear assessment of the threat level.
+
+
+
 **Project Structure**
 
 ```
